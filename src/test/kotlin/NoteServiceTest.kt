@@ -14,17 +14,17 @@ class NoteServiceTest {
 
     @Test
     fun getUserNotes() {
-        NoteService
+        NoteService.clearNotes()
         val ownerId = 111
         val note = Note(1,ownerId,true, "")
-        val notes = listOf(note)
+        val notes = arrayOf(note)
         NoteService.add(note)
-        assertEquals(NoteService.getUserNotes(ownerId),notes)
+        assertArrayEquals(NoteService.getUserNotes(ownerId),notes)
     }
 
     @Test
     fun getById() {
-        NoteService
+        NoteService.clearNotes()
         val id = 1
         val note = Note(id,1,true, "")
         NoteService.add(note)
@@ -33,15 +33,15 @@ class NoteServiceTest {
 
     @Test
     fun add() {
-        NoteService
+        NoteService.clearNotes()
         val note = Note(1,1,true, "")
         NoteService.add(note)
-        assertEquals(NoteService.getUserNotes(1).size, 1)
+        assertTrue(NoteService.getUserNotes(note.ownerId).size == 1)
     }
 
     @Test
     fun update() {
-        NoteService
+        NoteService.clearNotes()
         val id =1
         val note = Note(id, 1,true, "")
         NoteService.add(note)
@@ -71,7 +71,7 @@ class NoteServiceTest {
 
     @Test
     fun updateComment() {
-        NoteService
+        NoteService.clearNotes()
         val note = Note(1, 1,true, "")
         val comment = Comment(1,1, true, "")
         val commentUpdate = Comment(1,1, true, "123")

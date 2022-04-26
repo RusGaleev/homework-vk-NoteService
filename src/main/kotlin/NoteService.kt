@@ -104,6 +104,9 @@ object NoteService {
         }
         return true
     }
+    fun clearNotes(){
+        notes = emptyArray<Note>()
+    }
 }
 
 data class Note(
