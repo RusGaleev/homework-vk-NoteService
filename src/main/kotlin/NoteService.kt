@@ -49,11 +49,14 @@ object NoteService {
         if (note.visible == false) {
             return false
         }
-        note.visible = false
-        for ((index, item) in note.comments.withIndex()) {
-            item.visible = false //удаление комментариев
+        for ((index, item) in notes.withIndex()) {
+            if (notes[index].id == note.id) {
+                item.visible = false //удаление с возможностью восстановления
+                for ((i, it) in item.comments.withIndex()) {
+                    item.comments[i].visible = false //удаление комментариев
+                }
+            }
         }
-
         return true
     }
 
@@ -66,32 +69,41 @@ object NoteService {
         return true
     }
 
-    fun updateComment(note: Note, comment: Comment): Boolean {
-        for ((index, item) in note.comments.withIndex()) {
-            if (item.id == comment.id) {
-                note.comments[index] = comment
+    fun updateComment(noteId: Int, comment: Comment): Boolean {
+        for ((index, item) in notes.withIndex()) {
+            if (item.id == noteId) {
+                for ((i, it) in item.comments.withIndex()) {
+                    if (it.id == comment.id)
+                        item.comments[i] = comment
+                }
             }
         }
         return true
     }
-}
 
-fun deleteComment(note: Note, comment: Comment): Boolean {
-    for ((index, item) in note.comments.withIndex()) {
-        if (item.id == comment.id) {
-            note.comments[index] = item.copy(visible = false)
+    fun deleteComment(note: Note, comment: Comment): Boolean {
+        for ((index, item) in notes.withIndex()) {
+            if (item.id == note.id) {
+                for ((i, it) in item.comments.withIndex()) {
+                    if (it.id == comment.id)
+                    item.comments[i] = it.copy(visible = false)
+                }
+            }
         }
+        return true
     }
-    return true
-}
 
-fun restoreComment(note: Note, comment: Comment): Boolean {
-    for ((index, item) in note.comments.withIndex()) {
-        if (item.id == comment.id) {
-            note.comments[index] = item.copy(visible = true)
+    fun restoreComment(note: Note, comment: Comment): Boolean {
+        for ((index, item) in notes.withIndex()) {
+            if (item.id == note.id) {
+                for ((i, it) in item.comments.withIndex()) {
+                    if (it.id == comment.id)
+                    item.comments[i] = it.copy(visible = true)
+                }
+            }
         }
+        return true
     }
-    return true
 }
 
 data class Note(
